@@ -1,4 +1,28 @@
 window.onload = function() {
+    const dukeTileSrc = {
+      "@context" : "http://iiif.io/api/image/2/context.json",
+      "@id" : "https://repository.duke.edu/fcgi-bin/iipsrv.fcgi?IIIF=/nas/repo_deriv/hydra/multires_image/0/3/e3/03e3e227-7d09-4fc4-ab08-072983353afb/dscsi050080010.ptif",
+      "protocol" : "http://iiif.io/api/image",
+      "width" : 6464,
+      "height" : 4399,
+      "sizes" : [
+         { "width" : 202, "height" : 137 },
+         { "width" : 404, "height" : 274 },
+         { "width" : 808, "height" : 549 },
+         { "width" : 1616, "height" : 1099 },
+         { "width" : 3232, "height" : 2199 }
+      ],
+      "tiles" : [
+         { "width" : 256, "height" : 256, "scaleFactors" : [ 1, 2, 4, 8, 16, 32 ] }
+      ],
+      "profile" : [
+         "http://iiif.io/api/image/2/level1.json",
+         { "formats" : [ "jpg" ],
+           "qualities" : [ "native","color","gray" ],
+           "supports" : ["regionByPct","sizeByForcedWh","sizeByWh","sizeAboveFull","rotationBy90s","mirroring","gray"] }
+      ]
+    }
+
     const osdTileSource = {
         Image: {
             xmlns: 'http://schemas.microsoft.com/deepzoom/2008',
@@ -86,7 +110,7 @@ window.onload = function() {
             'https://cdn.jsdelivr.net/npm/openseadragon@2.4.1/build/openseadragon/images/',
         tileSources: [
             {
-                tileSource: localTileSource,
+                tileSource: dukeTileSrc,
             },
         ],
         gestureSettingsMouse: {
@@ -100,7 +124,7 @@ window.onload = function() {
     const eyes = async () => {
         const url = localTileSource['@id'] + '/full/full/0/default.jpg'
         const options = {
-            info: JSON.stringify(localTileSource),
+            info: JSON.stringify(dukeTileSrc),
         }
         eyesApi = await viewer.eyes(options)
 

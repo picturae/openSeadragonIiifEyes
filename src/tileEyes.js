@@ -16,6 +16,32 @@ const stdOptions = {
 const mouseHandler = function(event) {
     // canvas hover position
     console.log('x,y', event.position.x, event.position.y)
+
+    const tiledImage = viewer.world.getItemAt(0)
+
+    // hover position relatiev to the main image
+    const largeImageHoverPosition = tiledImage.viewerElementToImageCoordinates(
+        new $.Point(event.position.x, event.position.y),
+    )
+    console.log(
+        'tiledImage.viewerElementToImageCoordinates',
+        largeImageHoverPosition,
+    )
+
+    // size of the main image
+    const largeImageSize = tiledImage.getContentSize()
+    console.log('tiledImage.getContentSize()', largeImageSize)
+
+    const offHorizontally =
+        largeImageHoverPosition.x < 0 ||
+        largeImageHoverPosition.x > largeImageSize.x
+    const offVertically =
+        largeImageHoverPosition.y < 0 ||
+        largeImageHoverPosition.y > largeImageSize.y
+    const isHovering = !offHorizontally && !offVertically
+
+    console.log('isHovering', isHovering)
+    //find the right tile
 }
 
 const sanitiseOptions = currOptions => {
