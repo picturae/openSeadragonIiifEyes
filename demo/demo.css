@@ -1,0 +1,12 @@
+
+html,
+body,
+#openseadragon {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.openseadragon-canvas + div > div {
+    opacity: 1 !important;
+}
