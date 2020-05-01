@@ -11,63 +11,49 @@ let mouseTracker
 const stdOptions = {
     info: '',
     viewer: null,
-    callback: channelArray => console.log(channelArray.join()),
+    callback: (xyArray, channelArray) => {
+        console.log(xyArray.join())
+        console.log(channelArray.join())
+    },
     sampleSize: 1,
 }
 
-const mouseHandler = function(event) {
-    // canvas hover position
-    console.log('x,y', event.position.x, event.position.y)
+const mouseHandler = async function(event) {
+    const mousePoint = new $.Point(event.position.x, event.position.y)
+    const tile = tileCollection.find(mousePoint)
 
-    const tiledImage = viewer.world.getItemAt(0)
+    if (!tile) return
 
     // hover position relatiev to the main image
-    const largeImageHoverPosition = tiledImage.viewerElementToImageCoordinates(
-        new $.Point(event.position.x, event.position.y),
-    )
-    console.log(
-        'tiledImage.viewerElementToImageCoordinates',
-        largeImageHoverPosition,
-    )
+    const tiledImage = viewer.world.getItemAt(0)
+    let coordinate = tiledImage.viewerElementToImageCoordinates(mousePoint)
+    coordinate = [Math.floor(coordinate.x), Math.floor(coordinate.y)]
 
-    // size of the main image
-    const largeImageSize = tiledImage.getContentSize()
-    console.log('tiledImage.getContentSize()', largeImageSize)
-
-    const offHorizontally =
-        largeImageHoverPosition.x < 0 ||
-        largeImageHoverPosition.x > largeImageSize.x
-    const offVertically =
-        largeImageHoverPosition.y < 0 ||
-        largeImageHoverPosition.y > largeImageSize.y
-    const isHovering = !offHorizontally && !offVertically
-
-    console.log('isHovering', isHovering)
-
-    if (!isHovering) return
-    //find the right tile
-
-    const tileUrl = tileCollection.find(largeImageHoverPosition)
-    console.log('isHovering', isHovering)
+    // get color data async
+    const eyesApi = await imageEyes(tile.url)
+    const color = eyesApi.getPixelColor(tile.point.x, tile.point.y) || [, ,]
+    options.callback(coordinate, color)
 }
 
-const sanitiseOptions = currOptions => {
-    options = Object.assign({}, stdOptions, currOptions)
-    if (!options.viewer || !options.info || !options.callback) return
+const sanitiseOptions = customOptions => {
+    const opts = Object.assign({}, stdOptions, customOptions)
+    if (!opts.viewer || !opts.info || !opts.callback) return
 
-    options.info = JSON.parse(options.info)
-    if (options.info['@id']) {
-        options.baseUrl = options.info['@id']
+    opts.info = JSON.parse(opts.info)
+    if (opts.info['@id']) {
+        opts.baseUrl = opts.info['@id'] + '/'
+    } else if (opts.info.Image.Url) {
+        opts.baseUrl = opts.info.Image.Url
     }
-    if (!options.baseUrl) return
+    if (!opts.baseUrl) return
 
-    if (typeof options.callback !== 'function') return
+    if (typeof opts.callback !== 'function') return
 
-    return options
+    return opts
 }
 
-const loader = async function(currOptions) {
-    const options = sanitiseOptions(currOptions)
+const loader = function(customOptions) {
+    options = sanitiseOptions(customOptions)
     if (!options) return
     viewer = options.viewer
     tileCollection = new TileCollection(
@@ -90,13 +76,6 @@ const loader = async function(currOptions) {
         tileCollection.remove(tile.tile)
         // console.log('tile-unloaded  ', tile)
     })
-
-    // rubbish to get it build
-    const eyesApi = await imageEyes(tile.url)
-
-    //const eyesApi = await imageEyes(url)
-
-    return eyesApi
 }
 
 export default loader

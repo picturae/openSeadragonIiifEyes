@@ -110,7 +110,7 @@ window.onload = function() {
             'https://cdn.jsdelivr.net/npm/openseadragon@2.4.1/build/openseadragon/images/',
         tileSources: [
             {
-                tileSource: dukeTileSrc,
+                tileSource: osdTileSource,
             },
         ],
         gestureSettingsMouse: {
@@ -119,19 +119,13 @@ window.onload = function() {
         animationTime: 0,
         springStiffness: 100,
     })
-
-    let eyesApi
-    const eyes = async () => {
-        const url = localTileSource['@id'] + '/full/full/0/default.jpg'
-        const options = {
-            info: JSON.stringify(dukeTileSrc),
-        }
-        eyesApi = await viewer.eyes(options)
-
-        console.log('size ' + eyesApi.memoryUsage())
-        console.log('a color ' + eyesApi.getPixelColor(70,53))
-    }
-
-    eyes()
+    viewer.eyes({
+        callback: (xyCoord, color) => {
+            document.querySelector('#xy-coord').textContent = xyCoord.join(', ')
+            document.querySelector('#color-spot').style.background = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+            document.querySelector('#color-array').textContent = `${color[0]}, ${color[1]}, ${color[2]}`
+        },
+        info: JSON.stringify(osdTileSource),
+    })
 
 }

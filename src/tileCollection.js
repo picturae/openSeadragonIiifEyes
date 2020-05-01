@@ -1,62 +1,47 @@
 const TileCollection = function(baseUrl, width, height) {
-    // colection of cacheKeys of loaded tiles
-    // strings with {region}/{size}/{rotation}/{quality}.{format}
-    // see https://iiif.io/api/image/2.0/#image-request-uri-syntax
-    const collection = {}
+    const collection = []
 
     const add = function(tile) {
-        const gridLocation = tile.cacheKey.replace(baseUrl + '/', '')
-        const part = gridLocation.split('/')
-        let region =
-            part[0] === 'full' ? [0, 0, width, height] : part[0].split(',')
-        let size =
-            part[1] === 'full' ? [part[0][2], part[0][3]] : part[1].split(',')
-        if (size[0] === undefined) size[0] = tile.sourceBounds.width
-        if (size[1] === undefined) size[1] = tile.sourceBounds.height
-        const name = part[3].split('.')
-        collection[gridLocation] = {
-            region: region,
-            size: size,
-            rotation: part[2],
-            quality: name[0],
-            format: name[1],
-            scale: tile.sourceBounds.width / tile.size.x,
-        }
-        return
+        collection.push({
+            position: tile.position,
+            source: tile.sourceBounds,
+            size: tile.size,
+            scale: tile.size.x / tile.sourceBounds.width,
+            url: tile.url,
+        })
     }
 
     const remove = function(tile) {
-        const gridLocation = tile.cacheKey.replace(baseUrl, '')
-        delete collection[gridLocation]
-    }
-
-    const clear = function() {
-        collection = {}
+        collection = collection.filter(item => item.url !== tile.url)
     }
 
     const find = function(point) {
-        const hits = []
-        let horizontalHit
-        let verticalHit
-        for (let [key, value] of Object.entries(collection)) {
-            horizontalHit =
-                value.region[0] < point.x &&
-                value.region[0] + value.region[2] > point.x
-            verticalHit =
-                value.region[1] < point.y &&
-                value.region[1] + value.region[3] > point.y
-            if (horizontalHit && verticalHit) {
-                hits.push(key)
-                console.log(key)
+        const hits = collection.filter(
+            item =>
+                item.position.x < point.x &&
+                item.position.x + item.size.x > point.x &&
+                item.position.y < point.y &&
+                item.position.y + item.size.y > point.y,
+        )
+
+        if (hits.length) {
+            // console.log(hits.length, '/', collection.length, ' >>>>>>  ', hits)
+
+            hits.sort((a, b) => parseFloat(a.scale) - parseFloat(b.scale))
+            // pick the most downscaled image
+            const hit = hits.shift()
+            hit.point = {
+                x: Math.floor((point.x - hit.position.x) / hit.scale),
+                y: Math.floor((point.y - hit.position.y) / hit.scale),
             }
+            // console.log('=======', hit)
+            return hit
         }
-        return hits[0]
     }
 
     return {
         add: add,
         remove: remove,
-        clear: clear,
         find: find,
     }
 }

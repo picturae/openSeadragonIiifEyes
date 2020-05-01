@@ -5,8 +5,30 @@ body,
     width: 100%;
     height: 100%;
     margin: 0;
+    font: caption;
 }
 
 .openseadragon-canvas + div > div {
     opacity: 1 !important;
+}
+
+#datastrip {
+    position: fixed;
+    right: 0;
+    bottom:0;
+    background: #ccd;
+    color: #334;
+}
+#datastrip > * {
+    display: inline-block;
+}
+#xy-coord,
+#color-array {
+    width: 8em;
+    padding: 2px 4px;
+}
+#color-spot {
+    width: 1em;
+    height: 1em;
+    margin: -2px;
 }
