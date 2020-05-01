@@ -1,9 +1,11 @@
 import { isUsableNumber, roundAt } from './utilities'
+import { TileCollection } from './tileCollection'
 import imageEyes from 'imageEyes'
 
 const $ = window.OpenSeadragon
 let viewer
 let options
+let tileCollection
 let mouseTracker
 
 const stdOptions = {
@@ -41,7 +43,12 @@ const mouseHandler = function(event) {
     const isHovering = !offHorizontally && !offVertically
 
     console.log('isHovering', isHovering)
+
+    if (!isHovering) return
     //find the right tile
+
+    const tileUrl = tileCollection.find(largeImageHoverPosition)
+    console.log('isHovering', isHovering)
 }
 
 const sanitiseOptions = currOptions => {
@@ -63,19 +70,25 @@ const loader = async function(currOptions) {
     const options = sanitiseOptions(currOptions)
     if (!options) return
     viewer = options.viewer
+    tileCollection = new TileCollection(
+        options.baseUrl,
+        options.info.width,
+        options.info.height,
+    )
 
     mouseTracker = new $.MouseTracker({
         element: viewer.canvas,
         moveHandler: $.delegate(this, mouseHandler),
     })
 
-    var tlCount = 0
     viewer.addHandler('tile-loaded', function(tile) {
-        console.log('tile-loaded  ', tile, tlCount++)
+        tileCollection.add(tile.tile)
+        // console.log('tile-loaded  ', tile, tile.tile.cacheKey)
     })
 
     viewer.addHandler('tile-unloaded', function(tile) {
-        console.log('tile-unloaded  ', tile)
+        tileCollection.remove(tile.tile)
+        // console.log('tile-unloaded  ', tile)
     })
 
     // rubbish to get it build
