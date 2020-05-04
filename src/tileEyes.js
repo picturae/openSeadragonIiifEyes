@@ -1,11 +1,9 @@
 import { isUsableNumber, roundAt } from './utilities'
-import { TileCollection } from './tileCollection'
 import imageEyes from 'imageEyes'
 
 const $ = window.OpenSeadragon
 let viewer
 let options
-let tileCollection
 let mouseTracker
 
 const stdOptions = {
@@ -20,18 +18,48 @@ const stdOptions = {
 
 const mouseHandler = async function(event) {
     const mousePoint = new $.Point(event.position.x, event.position.y)
-    const tile = tileCollection.find(mousePoint)
-
-    if (!tile) return
-
-    // hover position relatiev to the main image
     const tiledImage = viewer.world.getItemAt(0)
-    let coordinate = tiledImage.viewerElementToImageCoordinates(mousePoint)
-    coordinate = [Math.floor(coordinate.x), Math.floor(coordinate.y)]
+
+    // hover position relative to the main image
+    const realHoverPosition = tiledImage.viewerElementToImageCoordinates(
+        mousePoint,
+    )
+    // size of the main image
+    const realSize = tiledImage.getContentSize()
+
+    // test hovering the main image
+    const offHorizontally =
+        realHoverPosition.x < 0 || realHoverPosition.x > realSize.x
+    const offVertically =
+        realHoverPosition.y < 0 || realHoverPosition.y > realSize.y
+    const isHovering = !offHorizontally && !offVertically
+
+    if (!isHovering) return
+
+    //find the right tile
+    const coordinate = [
+        Math.floor(realHoverPosition.x),
+        Math.floor(realHoverPosition.y),
+    ]
+    const iiifPath = [
+        `${coordinate[0] - options.sampleRadius},${coordinate[1] -
+            options.sampleRadius},${options.sampleDiameter},${
+            options.sampleDiameter
+        }`,
+        'full',
+        0,
+        `default.${options.fileFormat}`,
+    ]
+
+    const tileUrl = options.baseUrl + iiifPath.join('/')
 
     // get color data async
-    const eyesApi = await imageEyes(tile.url)
-    const color = eyesApi.getPixelColor(tile.point.x, tile.point.y) || [, ,]
+    const eyesApi = await imageEyes(tileUrl)
+    const color = eyesApi.getPixelColor(
+        options.sampleRadius,
+        options.sampleRadius,
+    )
+    if (!color) return
     options.callback(coordinate, color)
 }
 
@@ -42,12 +70,19 @@ const sanitiseOptions = customOptions => {
     opts.info = JSON.parse(opts.info)
     if (opts.info['@id']) {
         opts.baseUrl = opts.info['@id'] + '/'
-    } else if (opts.info.Image.Url) {
-        opts.baseUrl = opts.info.Image.Url
     }
     if (!opts.baseUrl) return
 
+    try {
+        opts.fileFormat = opts.info.profile[1].formats[0]
+    } catch (err) {}
+    if (!opts.fileFormat) return
+
     if (typeof opts.callback !== 'function') return
+
+    if (!isUsableNumber(opts.sampleSize) || opts.sampleSize < 1) return
+    opts.sampleRadius = Math.floor(opts.sampleSize / 2)
+    opts.sampleDiameter = opts.sampleRadius * 2 + 1
 
     return opts
 }
@@ -56,25 +91,9 @@ const loader = function(customOptions) {
     options = sanitiseOptions(customOptions)
     if (!options) return
     viewer = options.viewer
-    tileCollection = new TileCollection(
-        options.baseUrl,
-        options.info.width,
-        options.info.height,
-    )
-
     mouseTracker = new $.MouseTracker({
         element: viewer.canvas,
         moveHandler: $.delegate(this, mouseHandler),
-    })
-
-    viewer.addHandler('tile-loaded', function(tile) {
-        tileCollection.add(tile.tile)
-        // console.log('tile-loaded  ', tile, tile.tile.cacheKey)
-    })
-
-    viewer.addHandler('tile-unloaded', function(tile) {
-        tileCollection.remove(tile.tile)
-        // console.log('tile-unloaded  ', tile)
     })
 }
 
