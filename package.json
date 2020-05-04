@@ -5,7 +5,7 @@
     "main": "dist/openSeadragonIiifEyes.js",
     "module": "module/openSeadragonIiifEyes.js",
     "scripts": {
-        "prebuild": "clear-folder dist module && prettier './{src,test}/*.js' --write",
+        "prebuild": "clear-folder dist module && prettier './{demo,src,test}/*.js' --write",
         "build": "rollup --config",
         "coverage": "clear-folder coverage && jest --coverage",
         "once": "npm run test && npm run build",
