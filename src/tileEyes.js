@@ -1,5 +1,5 @@
 import { isUsableNumber, roundAt } from './utilities'
-import imageEyes from 'imageEyes'
+import imageEyes from 'image-eyes'
 
 const $ = window.OpenSeadragon
 let viewer
