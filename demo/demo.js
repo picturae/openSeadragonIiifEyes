@@ -1,41 +1,48 @@
 window.onload = function() {
-    const dukeTileSrc = {
-      "@context" : "http://iiif.io/api/image/2/context.json",
-      "@id" : "https://repository.duke.edu/fcgi-bin/iipsrv.fcgi?IIIF=/nas/repo_deriv/hydra/multires_image/0/3/e3/03e3e227-7d09-4fc4-ab08-072983353afb/dscsi050080010.ptif",
-      "protocol" : "http://iiif.io/api/image",
-      "width" : 6464,
-      "height" : 4399,
-      "sizes" : [
-         { "width" : 202, "height" : 137 },
-         { "width" : 404, "height" : 274 },
-         { "width" : 808, "height" : 549 },
-         { "width" : 1616, "height" : 1099 },
-         { "width" : 3232, "height" : 2199 }
-      ],
-      "tiles" : [
-         { "width" : 256, "height" : 256, "scaleFactors" : [ 1, 2, 4, 8, 16, 32 ] }
-      ],
-      "profile" : [
-         "http://iiif.io/api/image/2/level1.json",
-         { "formats" : [ "jpg" ],
-           "qualities" : [ "native","color","gray" ],
-           "supports" : ["regionByPct","sizeByForcedWh","sizeByWh","sizeAboveFull","rotationBy90s","mirroring","gray"] }
-      ]
+    // as a NOT working, silently failing example
+    const minimalIiifTileSource = {
+        '@context': 'http://iiif.io/api/image/2/context.json',
+        '@id':
+            'https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000004.jp2',
+        height: 7200,
+        width: 5434,
+        profile: ['http://iiif.io/api/image/2/level2.json'],
+        protocol: 'http://iiif.io/api/image',
+        tiles: [
+            {
+                scaleFactors: [1, 2, 4, 8, 16, 32],
+                width: 1024,
+            },
+        ],
     }
 
-    const osdTileSource = {
-        Image: {
-            xmlns: 'http://schemas.microsoft.com/deepzoom/2008',
-            Url:
-                'http://openseadragon.github.io/example-images/highsmith/highsmith_files/',
-            Format: 'jpg',
-            Overlap: '2',
-            TileSize: '256',
-            Size: {
-                Height: '9221',
-                Width: '7026',
+    const publicIiifTileSource = {
+        '@context': 'http://iiif.io/api/image/2/context.json',
+        '@id': 'https://demo.iiifhosting.com/iiif/demo',
+        protocol: 'http://iiif.io/api/image',
+        width: 4000,
+        height: 3600,
+        sizes: [
+            { width: 250, height: 225 },
+            { width: 500, height: 450 },
+        ],
+        tiles: [{ width: 256, height: 256, scaleFactors: [1, 2, 4, 8, 16] }],
+        profile: [
+            'http://iiif.io/api/image/2/level1.json',
+            {
+                formats: ['jpg'],
+                qualities: ['native', 'color', 'gray'],
+                supports: [
+                    'regionByPct',
+                    'regionSquare',
+                    'sizeByForcedWh',
+                    'sizeByWh',
+                    'sizeAboveFull',
+                    'rotationBy90s',
+                    'mirroring',
+                ],
             },
-        },
+        ],
     }
 
     const testTileSource = {
@@ -77,30 +84,39 @@ window.onload = function() {
     }
 
     const localTileSource = {
-        "@context" : "http://iiif.io/api/image/2/context.json",
-        "@id" : "http://localhost:8080/iiif//Users/ovdz/Projects/pixel/pic-pixel-storage/data/8/b/5ea033e62ebf1fba7b4689b8/9/1/5ea043113b3d468693117119",
-        "protocol" : "http://iiif.io/api/image",
-        "width" : 8984,
-        "height" : 6732,
-        "sizes" : [
-             { "width" : 140, "height" : 105 },
-             { "width" : 280, "height" : 210 },
-             { "width" : 561, "height" : 420 },
-             { "width" : 1123, "height" : 841 },
-             { "width" : 2246, "height" : 1683 },
-             { "width" : 4492, "height" : 3366 }
+        '@context': 'http://iiif.io/api/image/2/context.json',
+        '@id':
+            'http://localhost:8080/iiif//Users/ovdz/Projects/pixel/pic-pixel-storage/data/8/b/5ea033e62ebf1fba7b4689b8/9/1/5ea043113b3d468693117119',
+        protocol: 'http://iiif.io/api/image',
+        width: 8984,
+        height: 6732,
+        sizes: [
+            { width: 140, height: 105 },
+            { width: 280, height: 210 },
+            { width: 561, height: 420 },
+            { width: 1123, height: 841 },
+            { width: 2246, height: 1683 },
+            { width: 4492, height: 3366 },
         ],
-        "tiles" : [
-             { "width" : 256, "height" : 256, "scaleFactors" : [ 1, 2, 4, 8, 16, 32, 64 ] }
+        tiles: [
+            { width: 256, height: 256, scaleFactors: [1, 2, 4, 8, 16, 32, 64] },
         ],
-        "profile" : [
-             "http://iiif.io/api/image/2/level1.json",
-             {
-                 "formats" : [ "jpg" ],
-                 "qualities" : [ "native","color","gray" ],
-                 "supports" : ["regionByPct","regionSquare","sizeByForcedWh","sizeByWh","sizeAboveFull","rotationBy90s","mirroring"]
-             }
-        ]
+        profile: [
+            'http://iiif.io/api/image/2/level1.json',
+            {
+                formats: ['jpg'],
+                qualities: ['native', 'color', 'gray'],
+                supports: [
+                    'regionByPct',
+                    'regionSquare',
+                    'sizeByForcedWh',
+                    'sizeByWh',
+                    'sizeAboveFull',
+                    'rotationBy90s',
+                    'mirroring',
+                ],
+            },
+        ],
     }
 
     const $ = window.OpenSeadragon
@@ -110,7 +126,7 @@ window.onload = function() {
             'https://cdn.jsdelivr.net/npm/openseadragon@2.4.1/build/openseadragon/images/',
         tileSources: [
             {
-                tileSource: osdTileSource,
+                tileSource: publicIiifTileSource,
             },
         ],
         gestureSettingsMouse: {
@@ -122,10 +138,14 @@ window.onload = function() {
     viewer.eyes({
         callback: (xyCoord, color) => {
             document.querySelector('#xy-coord').textContent = xyCoord.join(', ')
-            document.querySelector('#color-spot').style.background = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
-            document.querySelector('#color-array').textContent = `${color[0]}, ${color[1]}, ${color[2]}`
+            document.querySelector(
+                '#color-spot',
+            ).style.background = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+            document.querySelector(
+                '#color-array',
+            ).textContent = `${color[0]}, ${color[1]}, ${color[2]}`
         },
-        info: JSON.stringify(osdTileSource),
+        info: JSON.stringify(publicIiifTileSource),
+        sampleSize: 11,
     })
-
 }

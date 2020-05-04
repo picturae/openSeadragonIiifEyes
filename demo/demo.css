@@ -30,5 +30,5 @@ body,
 #color-spot {
     width: 1em;
     height: 1em;
-    margin: -2px;
+    vertical-align: -.133em;
 }
