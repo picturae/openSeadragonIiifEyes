@@ -1,7 +1,7 @@
 {
-    "name": "openSeadragonIiifEyes",
+    "name": "openseadragon-iiif-eyes",
     "version": "0.0.1",
-    "description": "get image data from tiles",
+    "description": "Retrieve image data from tiles in a openseadragon/iiif environment",
     "main": "dist/openSeadragonIiifEyes.js",
     "module": "module/openSeadragonIiifEyes.js",
     "scripts": {
@@ -34,15 +34,15 @@
         "image-eyes": "0.0.1"
     },
     "devDependencies": {
-        "@babel/core": "^7.9.0",
-        "@babel/preset-env": "^7.9.0",
+        "@babel/core": "^7.9.6",
+        "@babel/preset-env": "^7.9.6",
         "@rollup/plugin-node-resolve": "^7.1.3",
         "clear-folder": "^1.1.2",
         "coveralls": "^3.1.0",
         "eslint": "^6.5.1",
         "eslint-plugin-jasmine": "^2.10.1",
         "eslint-plugin-jest": "^22.20.0",
-        "jest": "^25.1.0",
+        "jest": "^25.5.4",
         "onchange": "^6.1.1",
         "prettier": "^1.18.2",
         "rollup": "^1.32.1",

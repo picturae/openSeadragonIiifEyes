@@ -1,4 +1,4 @@
-#openSeadragonIiifEyes
+# openSeadragonIiifEyes
 
 openSeadragonIiifEyes exposes the genuine colordata of images to your IIIF served openseadragon  display, to serve scientific purposes. Unlike other eyedroppers, it samples the image and reads color value from there without color correction.
 
@@ -16,14 +16,14 @@ this plugin is available in the viewer as 'eyes'.
 You could invoke it like this:
 
     viewer.eyes({
-        callback: (mouseCoord, color) => {
-            ...
+        callback: (xyCoord, color) => {
+            ... your code ...
         },
         info: JSON.stringify(iiifTileSource),
         sampleSize: 11,
     })
 
-The mouseCoordinate and color are arrays containing numbers.
+The xyCoord and color are arrays containing numbers.
 When the configuration object is not correct, the plugin will silently fail.
 
 ## Demo
@@ -33,5 +33,5 @@ Drag and drop .../openSeadragonIiifEyes/demo/demo.html in a browser window
 ### Limitations
 
 * The info.json must specify a default file format
-* There is one image on the canvas
+* Only the top image on the canvas is reviewed
 * The image is not rotated
