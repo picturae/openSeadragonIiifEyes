@@ -1,6 +1,6 @@
 {
     "name": "openseadragon-iiif-eyes",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Retrieve image data from tiles in a openseadragon/iiif environment",
     "main": "dist/openSeadragonIiifEyes.js",
     "module": "module/openSeadragonIiifEyes.js",
