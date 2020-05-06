@@ -26,6 +26,17 @@ You could invoke it like this:
 The xyCoord and color are arrays containing numbers.
 When the configuration object is not correct, the plugin will silently fail.
 
+In case the original tileSource is not available,
+you could get the tileSource through an event in the viewer:
+
+    viewer.addHandler("open", function(event) {
+        viewer.eyes({
+            ...
+            info: JSON.stringify(event.eventSource.source),
+            ...
+        })
+    })
+
 ## Demo
 
 Drag and drop .../openSeadragonIiifEyes/demo/demo.html in a browser window

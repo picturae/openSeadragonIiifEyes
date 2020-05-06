@@ -55,14 +55,13 @@ const mouseHandler = async function(event) {
 
     // get color data async
     const eyesApi = await imageEyes(tileUrl)
-    const eyeDropper = options.sampleRadius
-        ? eyesApi.getPixelColor
-        : eyesApi.getDropColor
-    const color = eyeDropper(
-        options.sampleRadius,
-        options.sampleRadius,
-        options.sampleDiameter,
-    )
+    const color = options.sampleRadius
+        ? eyesApi.getDropColor(
+              options.sampleRadius,
+              options.sampleRadius,
+              options.sampleDiameter,
+          )
+        : eyesApi.getPixelColor(0, 0)
 
     if (!color) return
     options.callback(coordinate, color)
