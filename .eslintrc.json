@@ -1,0 +1,31 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jasmine": true,
+        "jest/globals": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:jasmine/recommended"
+    ],
+    "globals": {
+        "OpenSeadragon": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "jasmine",
+        "jest"
+    ],
+    "rules": {
+        "no-control-regex": "warn",
+        "no-const-assign": "warn",
+        "no-empty": "warn",
+        "no-extra-semi": "warn",
+        "no-sparse-arrays": "warn",
+        "no-unused-vars": ["warn"]
+    }
+}

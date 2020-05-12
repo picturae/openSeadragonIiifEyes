@@ -9,6 +9,7 @@
         "build": "rollup --config",
         "coverage": "clear-folder coverage && jest --coverage",
         "once": "npm run test && npm run build",
+        "pretest": "eslint {src,test}/*.js",
         "test": "exit 0",
         "watch": "onchange --initial \"{src,test}/*.js\" -- npm run once --silent"
     },
@@ -31,7 +32,7 @@
     },
     "homepage": "https://github.com/picturae/openSeadragonIiifEyes#readme",
     "dependencies": {
-        "image-eyes": "0.0.1"
+        "image-eyes": "0.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
