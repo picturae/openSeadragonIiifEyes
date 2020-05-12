@@ -1,21 +1,4 @@
-window.onload = function() {
-    // as a NOT working, silently failing example
-    const minimalIiifTileSource = {
-        '@context': 'http://iiif.io/api/image/2/context.json',
-        '@id':
-            'https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000004.jp2',
-        height: 7200,
-        width: 5434,
-        profile: ['http://iiif.io/api/image/2/level2.json'],
-        protocol: 'http://iiif.io/api/image',
-        tiles: [
-            {
-                scaleFactors: [1, 2, 4, 8, 16, 32],
-                width: 1024,
-            },
-        ],
-    }
-
+;(function($) {
     const publicIiifTileSource = {
         '@context': 'http://iiif.io/api/image/2/context.json',
         '@id': 'https://demo.iiifhosting.com/iiif/demo',
@@ -119,14 +102,16 @@ window.onload = function() {
         ],
     }
 
-    const $ = window.OpenSeadragon
+    // select the tileSource of your choice here
+    const currentTileSource = publicIiifTileSource
+
     const viewer = $({
         id: 'openseadragon',
         prefixUrl:
             'https://cdn.jsdelivr.net/npm/openseadragon@2.4.1/build/openseadragon/images/',
         tileSources: [
             {
-                tileSource: publicIiifTileSource,
+                tileSource: currentTileSource,
             },
         ],
         gestureSettingsMouse: {
@@ -145,7 +130,7 @@ window.onload = function() {
                 '#color-array',
             ).textContent = `${color[0]}, ${color[1]}, ${color[2]}`
         },
-        info: JSON.stringify(publicIiifTileSource),
+        info: JSON.stringify(currentTileSource),
         sampleSize: 11,
     })
-}
+})(window.OpenSeadragon)
