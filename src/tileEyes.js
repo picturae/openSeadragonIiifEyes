@@ -1,4 +1,4 @@
-import { isUsableNumber, roundAt } from './utilities'
+import { isUsableNumber } from './utilities'
 import imageEyes from 'image-eyes'
 
 const $ = window.OpenSeadragon
@@ -22,6 +22,11 @@ const standardOptions = {
     sampleSize: 1,
 }
 
+/**
+ * Handle the given callback
+ * @member (number[2]) coordinate, [0] = x, [1] = y
+ * @member (number[] | undefined) hovering color at image display | undefined
+ */
 const mouseHandler = async function(event) {
     const mousePoint = new $.Point(event.position.x, event.position.y)
     const tiledImage = viewer.world.getItemAt(0)
@@ -78,6 +83,9 @@ const mouseHandler = async function(event) {
     options.callback(coordinate, color)
 }
 
+/**
+ * Ensure some variables
+ */
 const sanitiseOptions = customOptions => {
     const opts = Object.assign({}, standardOptions, customOptions)
     if (!opts.viewer || !opts.info || !opts.callback) return
@@ -102,6 +110,9 @@ const sanitiseOptions = customOptions => {
     return opts
 }
 
+/**
+ * Intake for viewer, tileSource, callback and sampleSize
+ */
 const loader = function(customOptions) {
     options = sanitiseOptions(customOptions)
     if (!options) return
