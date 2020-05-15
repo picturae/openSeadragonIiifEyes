@@ -6,13 +6,19 @@ let viewer
 let options
 let mouseTracker
 
-const stdOptions = {
+/** Fallback callback to handle hovering
+ * @param (number[2]) coordinate, [0] = x, [1] = y
+ * @param (number[] | undefined) color, [0] = r, [1] = g, [2] = b | undefined (not hovering the image)
+ */
+const fallbackCallback = (xyArray, channelArray) => {
+    if (xyArray) console.log(xyArray.join())
+    if (channelArray) console.log(channelArray.join())
+}
+
+const standardOptions = {
     info: '',
     viewer: null,
-    callback: (xyArray, channelArray) => {
-        console.log(xyArray.join())
-        console.log(channelArray.join())
-    },
+    callback: fallbackCallback,
     sampleSize: 1,
 }
 
@@ -34,13 +40,18 @@ const mouseHandler = async function(event) {
         realHoverPosition.y < 0 || realHoverPosition.y > realSize.y
     const isHovering = !offHorizontally && !offVertically
 
-    if (!isHovering) return
-
     //find the right tile
     const coordinate = [
         Math.floor(realHoverPosition.x),
         Math.floor(realHoverPosition.y),
     ]
+
+    if (!isHovering) {
+        // offer an opportunity to handle not-hovering
+        options.callback(coordinate, undefined)
+        return
+    }
+
     const iiifPath = [
         `${coordinate[0] - options.sampleRadius},${coordinate[1] -
             options.sampleRadius},${options.sampleDiameter},${
@@ -68,7 +79,7 @@ const mouseHandler = async function(event) {
 }
 
 const sanitiseOptions = customOptions => {
-    const opts = Object.assign({}, stdOptions, customOptions)
+    const opts = Object.assign({}, standardOptions, customOptions)
     if (!opts.viewer || !opts.info || !opts.callback) return
 
     opts.info = JSON.parse(opts.info)
