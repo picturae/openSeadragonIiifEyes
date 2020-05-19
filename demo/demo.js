@@ -120,15 +120,23 @@
         animationTime: 0,
         springStiffness: 100,
     })
+
+    const insideImageHandler = (xyCoord, color) => {
+        document.querySelector('#xy-coord').textContent = xyCoord.join(', ')
+        const rgbString = `${color[0]}, ${color[1]}, ${color[2]}`
+        document.querySelector('#color-spot').style.background = `rgb(${rgbString})`
+        document.querySelector('#color-array').textContent = rgbString
+    }
+
+    const outsideImageHandler = () => {
+        document.querySelector('#xy-coord').innerHTML = '&nbsp;'
+        document.querySelector('#color-spot').style.background = 'transparent'
+        document.querySelector('#color-array').innerHTML = '&nbsp;'
+    }
+
     viewer.eyes({
         callback: (xyCoord, color) => {
-            document.querySelector('#xy-coord').textContent = xyCoord.join(', ')
-            document.querySelector(
-                '#color-spot',
-            ).style.background = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
-            document.querySelector(
-                '#color-array',
-            ).textContent = `${color[0]}, ${color[1]}, ${color[2]}`
+            color ? insideImageHandler(xyCoord, color) : outsideImageHandler()
         },
         info: JSON.stringify(currentTileSource),
         sampleSize: 11,
