@@ -124,7 +124,9 @@
     const insideImageHandler = (xyCoord, color) => {
         document.querySelector('#xy-coord').textContent = xyCoord.join(', ')
         const rgbString = `${color[0]}, ${color[1]}, ${color[2]}`
-        document.querySelector('#color-spot').style.background = `rgb(${rgbString})`
+        document.querySelector(
+            '#color-spot',
+        ).style.background = `rgb(${rgbString})`
         document.querySelector('#color-array').textContent = rgbString
     }
 
