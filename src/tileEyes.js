@@ -1,4 +1,4 @@
-import { isUsableNumber } from './utilities'
+import { isUsableNumber } from 'my-lib'
 import imageEyes from 'image-eyes'
 
 const $ = window.OpenSeadragon
