@@ -25,6 +25,15 @@ You could invoke it like this:
 
 The xyCoord and color are arrays containing numbers.
 When the configuration object is not correct, the plugin will silently fail.
+While hovering the image there are opportunities to handle errors:
+* there is no image:
+  xyCoord and color are undefined.
+* you hover over the canvas, but not over the image:
+  color is undefined.
+* the plugin fails to find a color:
+  color is null.
+Anyway, in case of a problem,
+the color will always evaluate to false.
 
 In case the original tileSource is not available,
 you could get the tileSource through an event in the viewer:
@@ -36,6 +45,11 @@ you could get the tileSource through an event in the viewer:
             ...
         })
     })
+
+You can dismiss the plugin and destroy the mouse tracker
+by calling it with an empty object:
+
+    viewer.eyes({})
 
 ## Demo
 

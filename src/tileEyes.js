@@ -31,6 +31,12 @@ const mouseHandler = async function(event) {
     const mousePoint = new $.Point(event.position.x, event.position.y)
     const tiledImage = viewer.world.getItemAt(0)
 
+    if (!tiledImage) {
+        // offer an opportunity to handle no-image
+        options.callback(undefined, undefined)
+        return
+    }
+
     // hover position relative to the main image
     const realHoverPosition = tiledImage.viewerElementToImageCoordinates(
         mousePoint,
@@ -79,7 +85,12 @@ const mouseHandler = async function(event) {
           )
         : eyesApi.getPixelColor(0, 0)
 
-    if (!color) return
+    if (!(color instanceof Array) || color.length === 0) {
+        // offer an opportunity to handle failure
+        options.callback(coordinate, null)
+        return
+    }
+
     options.callback(coordinate, color)
 }
 
@@ -114,6 +125,7 @@ const sanitiseOptions = customOptions => {
  * Intake for viewer, tileSource, callback and sampleSize
  */
 const loader = function(customOptions) {
+    if (mouseTracker) mouseTracker.destroy()
     options = sanitiseOptions(customOptions)
     if (!options) return
     viewer = options.viewer

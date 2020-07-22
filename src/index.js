@@ -17,7 +17,7 @@ const index = async function(info, callback) {
 }
 
 $.Viewer.prototype.eyes = function(options) {
-    if (!this._eyes && typeof options === 'object') {
+    if (typeof options === 'object') {
         options.viewer = this
         this._eyes = index(options)
     }
