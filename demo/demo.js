@@ -138,7 +138,8 @@
 
     viewer.eyes({
         callback: (xyCoord, color) => {
-            color ? insideImageHandler(xyCoord, color) : outsideImageHandler()
+            if (color) insideImageHandler(xyCoord, color)
+            if (color === undefined) outsideImageHandler()
         },
         info: JSON.stringify(currentTileSource),
         sampleSize: 11,
