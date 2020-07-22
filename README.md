@@ -15,6 +15,7 @@ and openSeadragon is opened,
 this plugin is available in the viewer as 'eyes'.
 You could invoke it like this:
 
+```js
     viewer.eyes({
         callback: (xyCoord, color) => {
             ... your code ...
@@ -22,6 +23,7 @@ You could invoke it like this:
         info: JSON.stringify(iiifTileSource),
         sampleSize: 11,
     })
+```
 
 The xyCoord and color are arrays containing numbers.
 When the configuration object is not correct, the plugin will silently fail.
@@ -38,6 +40,7 @@ the color will always evaluate to false.
 In case the original tileSource is not available,
 you could get the tileSource through an event in the viewer:
 
+```js
     viewer.addHandler("open", function(event) {
         viewer.eyes({
             ...
@@ -45,11 +48,14 @@ you could get the tileSource through an event in the viewer:
             ...
         })
     })
+```
 
 You can dismiss the plugin and destroy the mouse tracker
 by calling it with an empty object:
 
+```js
     viewer.eyes({})
+```
 
 ## Demo
 
