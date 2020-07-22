@@ -125,7 +125,14 @@ const sanitiseOptions = customOptions => {
  * Intake for viewer, tileSource, callback and sampleSize
  */
 const loader = function(customOptions) {
-    if (mouseTracker) mouseTracker.destroy()
+    if (mouseTracker) {
+        try {
+            mouseTracker.destroy()
+        } catch (error) {
+            // Cannot read property 'tracking' of undefined (versionStr: "2.1.0")
+            // happens when work in process is loaded in openSeadragon
+        }
+    }
     options = sanitiseOptions(customOptions)
     if (!options) return
     viewer = options.viewer
