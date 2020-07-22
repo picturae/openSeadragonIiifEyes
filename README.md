@@ -1,6 +1,6 @@
 # openSeadragonIiifEyes
 
-openSeadragonIiifEyes exposes the genuine colordata of images to your IIIF served openseadragon  display, to serve scientific purposes. Unlike other eyedroppers, it samples the image and reads color value from there without color correction.
+openSeadragonIiifEyes exposes the genuine colordata of images to your IIIF served openseadragon  display, to serve scientific purposes. Unlike other eyedroppers, it samples the image and reads color value from there without the browser doing recalculations or corrections.
 
 ## Install
 
