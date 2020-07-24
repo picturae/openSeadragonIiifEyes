@@ -16,13 +16,13 @@ this plugin is available in the viewer as 'eyes'.
 You could invoke it like this:
 
 ```js
-    viewer.eyes({
-        callback: (xyCoord, color) => {
-            ... your code ...
-        },
-        info: JSON.stringify(iiifTileSource),
-        sampleSize: 11,
-    })
+viewer.eyes({
+    callback: (xyCoord, color) => {
+        ... your code ...
+    },
+    info: JSON.stringify(iiifTileSource),
+    sampleSize: 11,
+})
 ```
 
 The xyCoord and color are arrays containing numbers.
@@ -34,27 +34,25 @@ While hovering the image there are opportunities to handle errors:
   color is undefined.
 * the plugin fails to find a color:
   color is null.
-Anyway, in case of a problem,
-the color will always evaluate to false.
 
 In case the original tileSource is not available,
 you could get the tileSource through an event in the viewer:
 
 ```js
-    viewer.addHandler("open", function(event) {
-        viewer.eyes({
-            ...
-            info: JSON.stringify(event.eventSource.source),
-            ...
-        })
+viewer.addHandler("open", function(event) {
+    viewer.eyes({
+        ...
+        info: JSON.stringify(event.eventSource.source),
+        ...
     })
+})
 ```
 
 You can dismiss the plugin and destroy the mouse tracker
 by calling it with an empty object:
 
 ```js
-    viewer.eyes({})
+viewer.eyes({})
 ```
 
 ## Demo
